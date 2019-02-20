@@ -124,7 +124,7 @@ func _heapInsert(array []int) []int {
 func _heapShiftUp(array []int, value int) {
 	array = append(array, value)
 	index := len(array) - 1
-	for index > 1 && array[index/2] < array[index] {
+	for index >= 1 && array[index/2] < array[index] {
 		array[index/2], array[index] = array[index], array[index/2]
 		index /= 2;
 	}
@@ -155,3 +155,5 @@ func _heapShiftDown(array []int) (slice []int, value int) {
 	}
 	return array, value
 }
+
+
