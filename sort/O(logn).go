@@ -5,52 +5,23 @@ import (
 	"math/rand"
 )
 
-func partition(slice []int,l,r int) int {
-
-	_rand:=rand.Intn(r-l+1)+l
-	slice[l],slice[_rand] = slice[_rand],slice[l]
-	value:=slice[l]
-	i:=l+1
-	for{
-		if i <=r && slice[i] < value{
-			i++
-		}
-
-	}
-
-}
-
 func QuickSort(slice []int) []int {
 
-	//if len(slice) < 16 {
-	//	return InsertSort(slice)
-	//}
-	//
-	//var leftSlice, rightSlice []int
-	//d := rand.Intn(len(slice) - 1)
-	//value := slice[d]
-	//for _, v := range slice[1:] {
-	//	if v <= value {
-	//		leftSlice = append(leftSlice, v)
-	//	} else {
-	//		rightSlice = append(rightSlice, v)
-	//	}
-	//}
-	//return append(append(QuickSort(leftSlice), value), QuickSort(rightSlice)...)
-	quickSort(slice, 0, len(slice)-1)
-	return slice
-}
-
-func quickSort(slice []int, start, end int) {
-
-	if start > end {
-		return
+	if len(slice) < 16 {
+		return InsertSort(slice)
 	}
 
-	d := start+1
-	value:=slice[0]
-	j := end
-
+	var leftSlice, rightSlice []int
+	d := rand.Intn(len(slice) - 1)
+	value := slice[d]
+	for _, v := range slice[1:] {
+		if v <= value {
+			leftSlice = append(leftSlice, v)
+		} else {
+			rightSlice = append(rightSlice, v)
+		}
+	}
+	return append(append(QuickSort(leftSlice), value), QuickSort(rightSlice)...)
 }
 
 func MergeSort(slice []int) []int {
@@ -69,23 +40,25 @@ func merge(nums []int, left, right int) {
 	merge(nums, left, mid)
 	merge(nums, mid+1, right)
 	if (nums[mid] > nums[mid+1]) {
-		_Merge(nums, left, mid, right)
+		_merge(nums, left, mid, right)
 	}
 }
 
-func _InsertSort(nums []int, left, right int) {
-	for i := left + 1; i <= right; i++ {
-		e := nums[i]
-		var j int
-		for j := i; j > left && nums[j-1] > e; j-- {
-			nums[j] = nums[j-1]
+func MergeSortByDownToUp(slice []int) []int {
+	for sz := 1; sz <= len(slice); sz += sz {
+		for i := 0; i+sz < len(slice); i += sz * 2 {
+			right := int(math.Min(float64(i+sz*2-1), float64(len(slice)-1)))
+			if sz*2-sz < 16 {
+				_InsertSort(slice, i, right)
+			} else if slice[i+sz-1] > slice[i+sz] {
+				_merge(slice, i, i+sz-1, right)
+			}
 		}
-		nums[j] = e
 	}
-
+	return slice
 }
 
-func _Merge(nums []int, left, mid, right int) {
+func _merge(nums []int, left, mid, right int) {
 	var NewNums []int
 	for i := left; i <= right; i++ {
 		NewNums = append(NewNums, nums[i])
@@ -110,16 +83,75 @@ func _Merge(nums []int, left, mid, right int) {
 	}
 }
 
-func MergeSortByDownToUp(slice []int) []int {
-	for sz := 1; sz <= len(slice); sz += sz {
-		for i := 0; i+sz < len(slice); i += sz * 2 {
-			right := int(math.Min(float64(i+sz*2-1), float64(len(slice)-1)))
-			if sz*2-sz < 16 {
-				_InsertSort(slice, i, right)
-			} else if slice[i+sz-1] > slice[i+sz] {
-				_Merge(slice, i, i+sz-1, right)
+func _InsertSort(nums []int, left, right int) {
+	for i := left + 1; i <= right; i++ {
+		e := nums[i]
+		var j int
+		for j := i; j > left && nums[j-1] > e; j-- {
+			nums[j] = nums[j-1]
+		}
+		nums[j] = e
+	}
+
+}
+
+
+func HeapSort(array []int) []int {
+	array = _heapInsert(array)
+	return array
+}
+
+func _heapInsert(array []int) []int {
+
+	var newArray []int;
+	for i := 0; i < len(array); i++ {
+		if len(newArray) != 0 {
+			newArray = append(newArray, array[i])
+			lastIndex := len(newArray) - 1
+			for newArray[lastIndex/2] < newArray[lastIndex] {
+				newArray[lastIndex/2], newArray[lastIndex] = newArray[lastIndex], newArray[lastIndex/2]
+				lastIndex /= 2
 			}
+		} else {
+			newArray = append(newArray, array[i])
 		}
 	}
-	return slice
+
+	return newArray
+
+}
+
+func _heapShiftUp(array []int, value int) {
+	array = append(array, value)
+	index := len(array) - 1
+	for index > 1 && array[index/2] < array[index] {
+		array[index/2], array[index] = array[index], array[index/2]
+		index /= 2;
+	}
+}
+
+func _heapShiftDown(array []int) (slice []int, value int) {
+	value = array[0]
+	array[0] = array[len(array)-1]
+	array = array[:len(array)-1]
+	var index int
+	for len(array) > index*2+1 || len(array) > index*2 {
+		var left, right int
+		if len(array) > index*2 && array[index*2] > left {
+			left = array[index*2]
+		}
+
+		if len(array) > index*2+1 && array[index*2+1] > right {
+			right = array[index*2+1]
+		}
+
+		if left > right {
+			array[index], array[index*2] = array[index*2], array[index]
+			index *= 2
+		} else {
+			array[index], array[index*2+1] = array[index*2+1], array[index]
+			index = index*2 + 1
+		}
+	}
+	return array, value
 }

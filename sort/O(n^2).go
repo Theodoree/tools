@@ -15,7 +15,6 @@ func SelectSort(arr []int) []int {
 	return arr
 }
 
-//最坏的情况下是O(n^2)  有序的情况下比logn还快  最好的情况下是O(n)
 func InsertSort(nums []int) []int {
 	for i := 1; i < len(nums); i++ {
 		if nums[i] < nums[i-1] {
@@ -31,7 +30,3 @@ func InsertSort(nums []int) []int {
 	return nums
 }
 
-func ShallSort(nums []int) []int {
-
-	return nums
-}
