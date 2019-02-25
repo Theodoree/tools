@@ -12,18 +12,18 @@ type Root struct {
 
 type Node struct {
 	Right, Left *Node
-	Key         int
-	Value       int
+	Key         int64
+	Value       int64
 }
 
-func NewRoot() *Root {
+func NewRoot(key int64, value int64) *Root {
 	return &Root{
-		&Node{Left: nil, Right: nil}, 0,
+		NewNode(key, value), 1,
 	}
 
 }
 
-func NewNode(key int, value int) *Node {
+func NewNode(key int64, value int64) *Node {
 	return &Node{
 		Key:   key,
 		Value: value,
@@ -61,10 +61,11 @@ func (r *Root) Insert(root *Node, key int, value string) *Node {
 }
 */
 
-func (r *Root) Insert(root *Node, key int, value int) *Node {
+func (r *Root) Insert(root *Node, key int64, value int64) *Node {
 	if root == nil {
 		r.Count++
-		return NewNode(key, value)
+		node := NewNode(key, value)
+		return node
 	}
 	if root.Key == key {
 		root.Value = value
@@ -76,10 +77,10 @@ func (r *Root) Insert(root *Node, key int, value int) *Node {
 	return root
 }
 
-func (r *Root) Contain(key int) bool {
+func (r *Root) Contain(key int64) bool {
 	return contain(r.Root, key)
 }
-func contain(node *Node, key int) bool {
+func contain(node *Node, key int64) bool {
 	if node == nil {
 		return false
 	}
@@ -92,10 +93,10 @@ func contain(node *Node, key int) bool {
 	}
 }
 
-func (r *Root) Search(root *Node, key int) *Node {
+func (r *Root) Search(root *Node, key int64) *Node {
 	return search(root, key)
 }
-func search(root *Node, key int) *Node {
+func search(root *Node, key int64) *Node {
 	if root == nil {
 		return nil
 	}
@@ -108,47 +109,83 @@ func search(root *Node, key int) *Node {
 	}
 }
 
-func (r *Root) Delete(target int) bool {
-	return delete(r.Root, target)
+func (r *Root) Delete(target int64) *Node {
+	node := delete(r.Root, target)
+	if node != nil {
+		r.Count--
+	}
+	return node
 }
-func delete(node *Node, target int) bool {
-	if node.Left.Key == target {
-		if node.Left.Left != nil {
-			node.Left = node.Left.Left
-		} else if node.Left.Right != nil {
-			node.Left = node.Left.Right
-		} else {
-			node.Left = nil
-		}
-		return true
-	} else if node.Right.Key == target {
-		if node.Right.Left != nil {
-			node.Right = node.Right.Left
-		} else if node.Right.Right != nil {
-			node.Right = node.Right.Right
-		} else {
-			node.Right = nil
-		}
-		return true
-	} else if node.Key < target {
-		return delete(node.Right, target)
-	} else if node.Key > target {
-		return delete(node.Left, target)
+
+//删除指定节点 返回子树root
+func delete(node *Node, target int64) *Node {
+	if node == nil {
+		return nil
 	}
 
-	return false
+	if node.Key == target {
+		minNode,minNodeParent := min(node.Right)
+		minNodeParent.Left = nil
+		minNode.Left = node.Left
+		minNode.Right = node.Right
+		return minNode
+	}
+
+	if node.Key > target {
+		node.Right = delete(node.Right, target)
+		return node
+	}
+
+	if node.Key < target {
+		node.Left = delete(node.Left, target)
+		return node
+	}
+
+	return nil
 }
 
-func (r *Root) update(target int, value int) bool {
+func (r *Root) DeleteMin() *Node {
+	if node := deleteMin(r.Root); node != nil {
+		r.Count --
+		return node
+	}
+	return nil
+}
+func deleteMin(node *Node) *Node {
+
+	if node.Left == nil {
+		right := node.Right
+		return right
+	}
+	node.Left = deleteMin(node.Left)
+	return node
+}
+func (r *Root) DeleteMax() *Node {
+	if node := deleteMax(r.Root); node != nil {
+		r.Count--
+		return node
+	}
+	return nil
+}
+func deleteMax(node *Node) *Node {
+	if node.Right == nil {
+		left := node.Left
+		return left
+	}
+	node.Right = deleteMax(node.Right)
+	return node
+}
+
+func (r *Root) update(target int64, value int64) *Node {
 	return update(r.Root, target, value)
 }
-func update(node *Node, target int, value int) bool {
+func update(node *Node, target int64, value int64) *Node {
 	if node == nil {
-		return false
+		return node
 	}
 	if node.Key == target {
 		node.Value = value
-		return true
+		return node
 	} else if node.Key > target {
 		return update(node.Left, target, value)
 	} else {
@@ -217,18 +254,55 @@ func LRD(root *Node, depth int) {
 }
 
 func (r *Root) LevelOrder() {
+	levelOrder(r.Root)
+}
+
+func levelOrder(node *Node) {
 	queue := NewQueue()
-	queue.Push(r.Root)
+	queue.Push(node)
 	var count int
-	for queue.Count != 0{
+	for queue.Count != 0 {
 		count++
-		node:=queue.Pop()
+		node := queue.Pop()
 		fmt.Println(node.Key)
-		if node.Left !=nil{
+		if node.Left != nil {
 			queue.Add(node.Left)
 		}
-		if node.Right != nil{
+		if node.Right != nil {
 			queue.Add(node.Right)
+		}
+	}
+
+}
+func (r *Root) Max() *Node {
+	return max(r.Root)
+}
+
+func max(node *Node) *Node {
+	current := node
+	for {
+		if current.Right != nil {
+			current = current.Right
+		} else {
+			return current
+		}
+	}
+
+}
+
+func (r *Root) Min() (*Node, *Node) {
+	return min(r.Root)
+}
+
+func min(node *Node) (*Node, *Node) {
+	current := node
+	var parten *Node
+	for {
+		if current.Left != nil {
+			parten = current
+			current = current.Left
+		} else {
+			return current, parten
 		}
 	}
 }
