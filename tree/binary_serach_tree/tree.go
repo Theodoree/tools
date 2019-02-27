@@ -16,11 +16,10 @@ type Node struct {
 	Value       int64
 }
 
-func NewRoot(key int64, value int64) *Root {
+func NewRoot() *Root {
 	return &Root{
-		NewNode(key, value), 1,
+		nil, 0,
 	}
-
 }
 
 func NewNode(key int64, value int64) *Node {
@@ -62,6 +61,11 @@ func (r *Root) Insert(root *Node, key int, value string) *Node {
 */
 
 func (r *Root) Insert(root *Node, key int64, value int64) *Node {
+	if r.Root == nil {
+		r.Count ++
+		r.Root = NewNode(key, value)
+		return r.Root
+	}
 	if root == nil {
 		r.Count++
 		node := NewNode(key, value)
@@ -124,7 +128,7 @@ func delete(node *Node, target int64) *Node {
 	}
 
 	if node.Key == target {
-		minNode,minNodeParent := min(node.Right)
+		minNode, minNodeParent := min(node.Right)
 		minNodeParent.Left = nil
 		minNode.Left = node.Left
 		minNode.Right = node.Right
