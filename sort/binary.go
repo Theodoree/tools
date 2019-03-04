@@ -1,4 +1,4 @@
-package binary_serach
+package sort
 
 //有序数组
 func BinartySerach(array []int, target int) int {
