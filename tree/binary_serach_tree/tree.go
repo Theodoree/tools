@@ -2,7 +2,6 @@ package binary_serach_tree
 
 import (
 	"fmt"
-	"time"
 )
 
 type Root struct {
@@ -120,9 +119,7 @@ func (r *Root) Delete(target int64) *Node {
 	}
 	return node
 }
-
-//删除指定节点 返回子树root
-func delete(node *Node, target int64) *Node {
+func delete(node *Node, target int64) *Node { //删除指定节点 返回子树root
 	if node == nil {
 		return nil
 	}
@@ -164,7 +161,14 @@ func deleteMin(node *Node) *Node {
 	node.Left = deleteMin(node.Left)
 	return node
 }
+
 func (r *Root) DeleteMax() *Node {
+	if r.Count == 1{
+		r.Count --
+		r.Root = nil
+		return nil
+	}
+
 	if node := deleteMax(r.Root); node != nil {
 		r.Count--
 		return node
@@ -197,6 +201,7 @@ func update(node *Node, target int64, value int64) *Node {
 	}
 
 }
+
 func (r *Root) DLR() {
 	DLR(r.Root, 0)
 }
@@ -243,7 +248,6 @@ func LRD(root *Node, depth int) {
 	if root == nil {
 		return
 	}
-	time.Sleep(time.Second)
 	var block string
 	for i := 0; i < depth; i++ {
 		block += "\t\t"
@@ -260,7 +264,6 @@ func LRD(root *Node, depth int) {
 func (r *Root) LevelOrder() {
 	levelOrder(r.Root)
 }
-
 func levelOrder(node *Node) {
 	queue := NewQueue()
 	queue.Push(node)
@@ -269,6 +272,7 @@ func levelOrder(node *Node) {
 		count++
 		node := queue.Pop()
 		fmt.Println(node.Key)
+		fmt.Println(node.Value)
 		if node.Left != nil {
 			queue.Add(node.Left)
 		}
@@ -278,10 +282,10 @@ func levelOrder(node *Node) {
 	}
 
 }
+
 func (r *Root) Max() *Node {
 	return max(r.Root)
 }
-
 func max(node *Node) *Node {
 	current := node
 	for {
@@ -297,7 +301,6 @@ func max(node *Node) *Node {
 func (r *Root) Min() (*Node, *Node) {
 	return min(r.Root)
 }
-
 func min(node *Node) (*Node, *Node) {
 	current := node
 	var parten *Node
@@ -310,3 +313,4 @@ func min(node *Node) (*Node, *Node) {
 		}
 	}
 }
+

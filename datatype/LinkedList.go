@@ -15,18 +15,20 @@ type Node struct {
 	Value int
 }
 
-func NewLinked() *Linked {
+func (l Linked)NewLinked() *Linked {
 	return &Linked{}
 }
-func NewNode(key, value int) *Node {
+
+func (l Linked)NewNode(key, value int) *Node {
 	return &Node{Key: key, Value: value}
 }
+
 func (l *Linked) InsertFirst(key, value int) {
 	current := l.Node
-	node := NewNode(key, value)
+	node := Linked{}.NewNode(key, value)
 
 	if current == nil {
-		l.Node = NewNode(key, value)
+		l.Node = Linked{}.NewNode(key, value)
 		return
 	}
 	current = l.Node
@@ -37,7 +39,7 @@ func (l *Linked) InsertFirst(key, value int) {
 }
 
 func (l *Linked) Insert(key, value int) {
-	node := NewNode(key, value)
+	node := Linked{}.NewNode(key, value)
 	if l.Node == nil {
 		l.Node = node
 		return

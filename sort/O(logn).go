@@ -39,7 +39,7 @@ func merge(nums []int, left, right int) {
 	mid := (left + right) / 2
 	merge(nums, left, mid)
 	merge(nums, mid+1, right)
-	if (nums[mid] > nums[mid+1]) {
+	if nums[mid] > nums[mid+1] {
 		_merge(nums, left, mid, right)
 	}
 }
@@ -86,41 +86,46 @@ func _merge(nums []int, left, mid, right int) {
 func _InsertSort(nums []int, left, right int) {
 	for i := left + 1; i <= right; i++ {
 		e := nums[i]
-		var j int
 		for j := i; j > left && nums[j-1] > e; j-- {
 			nums[j] = nums[j-1]
 		}
-		nums[j] = e
 	}
 
 }
 
-
 func HeapSort(array []int) []int {
+
 	array = _heapInsert(array)
+	//_heapShiftUp(array)
+	//_heapShiftDown(array)
+
+	for i := 0; i < len(array); i++ {
+		array[i] = _heapExtractMax(array)
+	}
+
 	return array
 }
 
 func _heapInsert(array []int) []int {
 
-	var newArray []int;
+	var newArray []int
+
 	for i := 0; i < len(array); i++ {
-		if len(newArray) != 0 {
-			newArray = append(newArray, array[i])
-			lastIndex := len(newArray) - 1
-			for newArray[lastIndex/2] < newArray[lastIndex] {
-				newArray[lastIndex/2], newArray[lastIndex] = newArray[lastIndex], newArray[lastIndex/2]
-				lastIndex /= 2
-			}
-		} else {
-			newArray = append(newArray, array[i])
+		newArray = append(newArray, array[i])
+		lastIndex := len(newArray) - 1
+		for newArray[lastIndex/2] > newArray[lastIndex] {
+			newArray[lastIndex/2], newArray[lastIndex] = newArray[lastIndex], newArray[lastIndex/2]
+			lastIndex /= 2
 		}
 	}
-
 	return newArray
-
 }
 
+func _heapExtractMax(array []int) int {
+	array[1], array[len(array)-1] = array[len(array)-1], array[1]
+	_heapShiftDown(array)
+	return 0
+}
 func _heapShiftUp(array []int, value int) {
 	array = append(array, value)
 	index := len(array) - 1
@@ -155,5 +160,3 @@ func _heapShiftDown(array []int) (slice []int, value int) {
 	}
 	return array, value
 }
-
-

@@ -21,6 +21,7 @@ func Newqueue(node *interface{}) *queue {
 func (q *Queue) Push(node *interface{}) {
 	q.Add(node)
 }
+
 func (q *Queue) Add(node *interface{}) bool {
 	if q.Root == nil {
 		q.Root = Newqueue(node)
