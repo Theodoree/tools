@@ -8,6 +8,7 @@ type StackNode struct {
 	Value int
 }
 
+//FILO
 func NewStack() *Stack {
 	return &Stack{}
 }

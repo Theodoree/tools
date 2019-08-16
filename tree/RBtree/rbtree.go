@@ -10,14 +10,6 @@ type RBTree struct {
 	Count uint64
 }
 
-type RBNode struct {
-	Parent      *RBNode
-	Key         int64
-	Color       bool
-	Value       int64
-	Left, Right *RBNode
-}
-
 /*
 红黑树的特性:
 （1）每个节点或者是黑色，或者是红色。
@@ -131,21 +123,21 @@ func (r *RBTree) LeftRotate(x *RBNode) {
  *      lx  rx                                rx  ry
  *
  */
-func (r *RBTree) RightRotate(y *RBNode)  {
+func (r *RBTree) RightRotate(y *RBNode) {
 	x := y.Left
 	y.Left = x.Right
-	if x.Right !=nil{
+	if x.Right != nil {
 		x.Right.Parent = y
 	}
 
 	x.Parent = y.Parent
 
-	if y.Parent == nil{
+	if y.Parent == nil {
 		r.Root = x
-	}else{
-		if y == y.Parent.Right{
+	} else {
+		if y == y.Parent.Right {
 			y.Parent.Right = x
-		}else{
+		} else {
 			y.Parent.Left = x
 		}
 	}
@@ -153,3 +145,79 @@ func (r *RBTree) RightRotate(y *RBNode)  {
 	x.Right = y
 	y.Parent = x
 }
+
+func (r *RBTree) InsertFixUp(y *RBNode) {
+
+	parent := y.GetParent()
+	grandParent := y.GetGrandParent()
+
+	// 若“父节点存在，并且父节点的颜色是红色”
+	for parent != nil && parent.IsRed() {
+		uncle, _ := y.GetUncle()
+		//若“父节点”是“祖父节点的左孩子”
+		if parent == grandParent.Left {
+			// Case 1条件：叔叔节点是红色
+
+			if uncle != nil && uncle.IsRed() {
+				uncle.SetBlack()
+				parent.SetBlack()
+				grandParent.SetRed()
+				y = grandParent
+				continue
+			}
+
+			// Case 2条件：叔叔是黑色，且当前节点是右孩子
+			if parent.Right == y {
+				r.LeftRotate(parent)
+				tmp := parent
+				parent = y
+				y = tmp
+			}
+
+			// Case 3条件：叔叔是黑色，且当前节点是左孩子。
+			parent.SetBlack()
+			grandParent.SetRed()
+			r.RightRotate(grandParent)
+		} else { //若“父节点”是“祖父节点的右孩子”
+
+			// Case 1条件：叔叔节点是红色
+			if uncle != nil && uncle.IsRed() {
+				uncle.SetBlack()
+			}
+		}
+	}
+
+}
+
+/*
+
+            // Case 1条件：叔叔节点是红色
+            RBTNode<T> uncle = gparent.left;
+            if ((uncle!=null) && isRed(uncle)) {
+                setBlack(uncle);
+                setBlack(parent);
+                setRed(gparent);
+                node = gparent;
+                continue;
+            }
+
+            // Case 2条件：叔叔是黑色，且当前节点是左孩子
+            if (parent.left == node) {
+                RBTNode<T> tmp;
+                rightRotate(parent);
+                tmp = parent;
+                parent = node;
+                node = tmp;
+            }
+
+            // Case 3条件：叔叔是黑色，且当前节点是右孩子。
+            setBlack(parent);
+            setRed(gparent);
+            leftRotate(gparent);
+        }
+    }
+
+    // 将根节点设为黑色
+    setBlack(this.mRoot);
+}
+*/

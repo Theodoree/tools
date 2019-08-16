@@ -15,6 +15,7 @@ func NewQueue() *Queue {
 		nil, nil, 0}
 }
 
+//FIFO
 func Newqueue(node *interface{}) *queue {
 	return &queue{node: node, Next: nil}
 }
@@ -47,4 +48,8 @@ func (q *Queue) Pop() *interface{} {
 	q.First = queue.Next
 	q.Count--
 	return queue.node
+}
+
+func (q *Queue) IsEmpty() bool {
+	return q.Count == 0
 }

@@ -2,7 +2,7 @@ package datatype
 
 import (
 	"fmt"
-	"qiniupkg.com/x/errors.v7"
+	"errors"
 )
 
 type Linked4 struct {
