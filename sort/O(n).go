@@ -1,7 +1,8 @@
 package sort
 
-
-//TODO 
-func BucketSort(slice []int){
+// TODO
+func BucketSort(slice []int) {
 
 }
+
+

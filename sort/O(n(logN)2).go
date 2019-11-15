@@ -1,19 +1,16 @@
 package sort
 
 
-func ShellSort(slice []int) []int {
-	h := 1
-	for h <= len(slice)/3 {
-		h *= 3 + 1
-	}
-	for h > 0 {
-		for i := h; i < len(slice); i++ {
-			for j := i; j >= h && slice[j] < slice[j-h]; j -= h {
-				slice[j], slice[j-h] = slice[j-h], slice[j]
-			}
-		}
-		h = (h-1)/ 3
-	}
-
-	return slice
+func ShellSort(nums []int) []int{
+    //外层步长控制
+    for step := len(nums) / 2; step > 0; step /= 2 {
+        // 开始插入排序
+        for i := step; i < len(nums); i++ {
+            // 满足条件则插入
+            for j := i - step; j >= 0 && nums[j+step] < nums[j]; j -= step {
+                nums[j], nums[j+step] = nums[j+step], nums[j]
+            }
+        }
+    }
+    return nums
 }
