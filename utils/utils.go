@@ -154,14 +154,3 @@ const (
 	LEVEL printType = "LEVEL"
 	Null            = 0x7777777
 )
-
-type num interface {
-	uint8 | uint16 | uint32 | uint64 | int8 | int16 | int32 | int64
-}
-
-func Abs[T num](num T) T {
-	if num < 0 {
-		return -num
-	}
-	return num
-}

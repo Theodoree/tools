@@ -1,48 +1,42 @@
 package sort
 
-func SelectSort(arr []int) []int {
-	for index, _ := range arr {
+import "github.com/Theodoree/tools/generics"
 
+func SelectSort[T generics.Num](slice []T) []T {
+	for index, _ := range slice {
 		lowIndex := index
-
-		for i := index + 1; i < len(arr); i++ {
-			if arr[i] < arr[lowIndex] {
+		for i := index + 1; i < len(slice); i++ {
+			if slice[i] < slice[lowIndex] {
 				lowIndex = i
 			}
 		}
-		arr[index], arr[lowIndex] = arr[lowIndex], arr[index]
+		slice[index], slice[lowIndex] = slice[lowIndex], slice[index]
 	}
-	return arr
+	return slice
 }
 
-func InsertSort(nums []int) []int {
-	for i := 1; i < len(nums); i++ {
-		if nums[i] < nums[i-1] {
-			j := i - 1
-			temp := nums[i]
-			for j >= 0 && nums[j] > temp {
-				nums[j+1] = nums[j]
-				j--
-			}
-			nums[j+1] = temp
-		}
-	}
-	return nums
+func InsertSort[T generics.Num](slice []T) []T {
+	_InsertSort(slice, 0, len(slice)-1)
+	return slice
 }
 
-func BubbleSort(nums []int) []int {
-
-	for i := 0; i < len(nums); i++ {
-
-		for j := i; j < len(nums); j++ {
-
-			if nums[i] > nums[j] {
-
-				nums[i], nums[j] = nums[j], nums[i]
-			}
-
+func _InsertSort[T generics.Num](nums []T, left, right int) {
+	for i := left + 1; i <= right; i++ {
+		e := nums[i]
+		for j := i; j > left && nums[j-1] > e; j-- {
+			nums[j] = nums[j-1]
 		}
 	}
 
-	return  nums
+}
+
+func BubbleSort[T generics.Num](slice []T) []T {
+	for i := 0; i < len(slice); i++ {
+		for j := i; j < len(slice); j++ {
+			if slice[i] > slice[j] {
+				slice[i], slice[j] = slice[j], slice[i]
+			}
+		}
+	}
+	return slice
 }

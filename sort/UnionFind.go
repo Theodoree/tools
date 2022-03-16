@@ -1,56 +1,39 @@
 package sort
 
-type UnionFind struct {
-	Parent []int
-	count  int
-	Rank   []int
+type ufs struct {
+	roots []int
+	cnt   int
 }
 
-func NewUnionFind(n int) *UnionFind {
-	var parent, rank []int
-
-	for i := 0; i < n; i++ {
-		parent = append(parent, i)
-		rank = append(rank, i)
+func newUfs(n int) *ufs {
+	roots := make([]int, n)
+	for i := range roots {
+		roots[i] = i
 	}
-	return &UnionFind{
-		Parent: parent, count: n, Rank: rank,
+	return &ufs{roots, n}
+}
+func (v *ufs) Find(x int) int {
+	root := x
+	for root != v.roots[root] {
+		root = v.roots[root]
 	}
-}
-
-func (u *UnionFind) Size() int {
-	return u.count
-}
-
-func (u *UnionFind) Find(p int) int {
-	if p > 0 && u.count > p {
-		for p != u.Parent[p] {
-			p = u.Parent[p]
-		}
-		return p
+	for root != v.roots[x] {
+		cur := v.roots[x]
+		v.roots[x] = root
+		x = cur
 	}
-	return 0
+	return root
 }
 
-//判断p和q的祖宗节点是否一致
-func (u *UnionFind) IsConnected(p, q int) bool {
-	return u.Find(p) == u.Find(q)
-}
-
-func (u *UnionFind) UnionElements(p, q int) {
-	pRoot := u.Find(p)
-	qRoot := u.Find(q)
-
-	if pRoot == qRoot {
+func (v *ufs) Union(x, y int) {
+	xRoot, yRoot := v.Find(x), v.Find(y)
+	if xRoot == yRoot {
 		return
 	}
+	v.cnt--
+	v.roots[xRoot] = yRoot
+}
 
-	if u.Rank[pRoot] < u.Rank[qRoot] {
-		u.Parent[pRoot] = qRoot
-	} else if u.Rank[qRoot] < u.Rank[pRoot] {
-		u.Parent[qRoot] = pRoot
-	} else {
-		u.Parent[pRoot] = qRoot
-		u.Rank[qRoot]++
-	}
+func (v *ufs) Count() int {
+	return v.cnt
 }
