@@ -11,34 +11,39 @@ n >= 3
 给定一个严格递增的正整数数组形成序列 arr ，找到 arr 中最长的斐波那契式的子序列的长度。如果一个不存在，返回  0 。
 （回想一下，子序列是从原序列 arr 中派生出来的，它从 arr 中删掉任意数量的元素（也可以不删），而不改变其余元素的顺序。例如， [3, 5, 8] 是 [3, 4, 5, 6, 7, 8] 的一个子序列）
 */
-
 func lenLongestFibSubseq(arr []int) int {
-	var m = make(map[int]struct{})
-	for _,v:=range arr{
-		m[v] = struct{}{}
+	var m = make(map[int]int)
+	for idx, v := range arr {
+		m[v] = idx
 	}
-	var max int
-	for i:=0;i<len(arr);i++{
-		for j:=i+1;j<len(arr);j++{
-			key:=arr[i]+arr[j]
-			last:=arr[j]
-			ok:=true
-			cnt:=1
-			for ok {
-				_,ok = m[key]
-				key = last + key
-				last = key - last
-				cnt++
 
+	var dp = make([][]int, len(arr))
+	for idx := range dp {
+		dp[idx] = make([]int, len(arr))
+	}
+
+	max := func(t1, t2 int) int {
+		if t1 > t2 {
+			return t1
+		}
+		return t2
+	}
+	var result int
+	for i := 1; i < len(arr); i++ {
+		for j := 0; j < i; j++ {
+			subVal := arr[i] - arr[j]
+			val, ok := m[subVal]
+			if ok && val < j {
+				dp[i][j] = dp[j][val] + 1
+			} else {
+				dp[i][j] = 2
 			}
-			if cnt > max {
-				max = cnt
-			}
+			result = max(result, dp[i][j])
+
 		}
 	}
-	if max < 3 {
+	if result <= 2 {
 		return 0
 	}
-	return max
+	return result
 }
-
