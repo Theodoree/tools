@@ -1,12 +1,12 @@
 package sort
 
 import (
-	"github.com/Theodoree/tools/generics"
+	"golang.org/x/exp/constraints"
 	"math"
 	"math/rand"
 )
 
-func QuickSort[T generics.Num](slice []T) []T {
+func QuickSort[T constraints.Integer](slice []T) []T {
 
 	if len(slice) < 16 {
 		return InsertSort(slice)
@@ -26,7 +26,7 @@ func QuickSort[T generics.Num](slice []T) []T {
 	return append(append(QuickSort(leftSlice), value), QuickSort(rightSlice)...)
 }
 
-func QuickSort1[T generics.Num](slice []T) []T {
+func QuickSort1[T constraints.Integer](slice []T) []T {
 	var fn func(values []T, left, right int)
 	fn = func(values []T, left, right int) {
 		temp := values[left]
@@ -62,7 +62,7 @@ func QuickSort1[T generics.Num](slice []T) []T {
 	return slice
 }
 
-func QuickSort2[T generics.Num](slice []T) []T {
+func QuickSort2[T constraints.Integer](slice []T) []T {
 	var fn func(slice []T)
 	fn = func(slice []T) {
 		if len(slice) <= 1 {
@@ -88,7 +88,7 @@ func QuickSort2[T generics.Num](slice []T) []T {
 	return slice
 }
 
-func QuickSort3[T generics.Num](slice []T) []T {
+func QuickSort3[T constraints.Integer](slice []T) []T {
 	var fn func(slice []T, left int, right int)
 	fn = func(slice []T, left int, right int) {
 		if left >= right {
@@ -120,13 +120,13 @@ func QuickSort3[T generics.Num](slice []T) []T {
 	return slice
 }
 
-func MergeSort[T generics.Num](slice []T) []T {
+func MergeSort[T constraints.Integer](slice []T) []T {
 
 	merge(slice, 0, len(slice)-1)
 	return slice
 }
 
-func merge[T generics.Num](nums []T, left, right int) {
+func merge[T constraints.Integer](nums []T, left, right int) {
 
 	if (right - left) < 16 {
 		_InsertSort(nums, left, right)
@@ -140,7 +140,7 @@ func merge[T generics.Num](nums []T, left, right int) {
 	}
 }
 
-func _merge[T generics.Num](nums []T, left, mid, right int) {
+func _merge[T constraints.Integer](nums []T, left, mid, right int) {
 	var NewNums []T
 	for i := left; i <= right; i++ {
 		NewNums = append(NewNums, nums[i])
@@ -165,7 +165,7 @@ func _merge[T generics.Num](nums []T, left, mid, right int) {
 	}
 }
 
-func MergeSortByDownToUp[T generics.Num](slice []T) []T {
+func MergeSortByDownToUp[T constraints.Integer](slice []T) []T {
 	for sz := 1; sz <= len(slice); sz += sz {
 		for i := 0; i+sz < len(slice); i += sz * 2 {
 			right := int(math.Min(float64(i+sz*2-1), float64(len(slice)-1)))

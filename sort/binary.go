@@ -1,10 +1,12 @@
 package sort
 
-import "github.com/Theodoree/tools/generics"
+import (
+	"golang.org/x/exp/constraints"
+)
 
 // 第一个值等于给定值的元素
 
-func BinarySearch[T generics.Num](num []T, target T) int {
+func BinarySearch[T constraints.Integer](num []T, target T) int {
 
 	var (
 		left  int
@@ -33,7 +35,7 @@ func BinarySearch[T generics.Num](num []T, target T) int {
 
 // 最后一个值等于给定值的元素
 
-func BinarySearchLast[T generics.Num](num []T, target T) int {
+func BinarySearchLast[T constraints.Integer](num []T, target T) int {
 	var (
 		left  int
 		right = len(num) - 1
@@ -60,7 +62,7 @@ func BinarySearchLast[T generics.Num](num []T, target T) int {
 
 // 寻找第一个大于给定值的元素
 
-func BinarySearchBigger[T generics.Num](num []T, target T) int {
+func BinarySearchBigger[T constraints.Integer](num []T, target T) int {
 	var (
 		left  int
 		right = len(num) - 1
@@ -90,7 +92,7 @@ func BinarySearchBigger[T generics.Num](num []T, target T) int {
 
 // 寻找第一个小于给定值的元素
 
-func BinarySearchLess[T generics.Num](num []T, target T) int {
+func BinarySearchLess[T constraints.Integer](num []T, target T) int {
 	var (
 		left  int
 		right = len(num) - 1

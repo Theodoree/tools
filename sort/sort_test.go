@@ -1,12 +1,12 @@
 package sort
 
 import (
-	"github.com/Theodoree/tools/generics"
+	"golang.org/x/exp/constraints"
 	"math/rand"
 	"testing"
 )
 
-func AreSorted[T generics.Num](arr []T) bool {
+func AreSorted[T constraints.Integer](arr []T) bool {
 	for i := 1; i < len(arr); i++ {
 		if arr[i-1] > arr[i] {
 			return false
@@ -15,7 +15,7 @@ func AreSorted[T generics.Num](arr []T) bool {
 	return true
 }
 
-func randArr[T generics.Num](t T, cnt int) []T {
+func randArr[T constraints.Integer](t T, cnt int) []T {
 	var arr []T
 	for i := 0; i < cnt; i++ {
 		arr = append(arr, T(rand.Int()))

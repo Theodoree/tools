@@ -1,8 +1,10 @@
 package sort
 
-import "github.com/Theodoree/tools/generics"
+import (
+	"golang.org/x/exp/constraints"
+)
 
-func ShellSort[T generics.Num](slice []T) []T {
+func ShellSort[T constraints.Integer](slice []T) []T {
 	//外层步长控制
 	for step := len(slice) / 2; step > 0; step /= 2 {
 		// 开始插入排序

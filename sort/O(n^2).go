@@ -1,8 +1,10 @@
 package sort
 
-import "github.com/Theodoree/tools/generics"
+import (
+	"golang.org/x/exp/constraints"
+)
 
-func SelectSort[T generics.Num](slice []T) []T {
+func SelectSort[T constraints.Integer](slice []T) []T {
 	for index, _ := range slice {
 		lowIndex := index
 		for i := index + 1; i < len(slice); i++ {
@@ -15,12 +17,12 @@ func SelectSort[T generics.Num](slice []T) []T {
 	return slice
 }
 
-func InsertSort[T generics.Num](slice []T) []T {
+func InsertSort[T constraints.Integer](slice []T) []T {
 	_InsertSort(slice, 0, len(slice)-1)
 	return slice
 }
 
-func _InsertSort[T generics.Num](nums []T, left, right int) {
+func _InsertSort[T constraints.Integer](nums []T, left, right int) {
 	for i := left + 1; i <= right; i++ {
 		e := nums[i]
 		for j := i; j > left && nums[j-1] > e; j-- {
@@ -30,7 +32,7 @@ func _InsertSort[T generics.Num](nums []T, left, right int) {
 
 }
 
-func BubbleSort[T generics.Num](slice []T) []T {
+func BubbleSort[T constraints.Integer](slice []T) []T {
 	for i := 0; i < len(slice); i++ {
 		for j := i; j < len(slice); j++ {
 			if slice[i] > slice[j] {

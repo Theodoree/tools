@@ -1,28 +1,28 @@
 package generics
 
-type Num interface {
-	int | int8 | int16 | int32 | int64 | float32 | float64 | uint | uint8 | uint16 | uint32 | uint64
-}
+import (
+	"golang.org/x/exp/constraints"
+)
 
-func Abs[T Num](num T) T {
+func Abs[T constraints.Integer](num T) T {
 	if num < 0 {
 		return -num
 	}
 	return num
 }
 
-func Add[T Num](a, b T) T {
+func Add[T constraints.Integer](a, b T) T {
 	return a + b
 }
 
-func Sub[T Num](a, b T) T {
+func Sub[T constraints.Integer](a, b T) T {
 	return a - b
 }
 
-func Mut[T Num](a, b T) T {
+func Mut[T constraints.Integer](a, b T) T {
 	return a * b
 }
 
-func Div[T Num](a, b T) T {
+func Div[T constraints.Integer](a, b T) T {
 	return a / b
 }
